@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Guess the Number</title>
+  <!-- Link to external CSS stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <!-- Background video playing in loop, muted -->
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='Vedio.mp4') }}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Congratulations overlay shown only when user wins -->
+  {% if win %}
+  <div class="congrats-overlay">
+    <h1 class="congrats-text">
+      🎉 Congratulations 🎉 <br>
+      🎊 <span class="win-game">You Won the Game!</span> 🎊
+    </h1>
+  </div>
+  {% endif %}
+
+  <!-- Main container for game content -->
+  <div class="container">
+    <div class="content">
+      <!-- Game title with colorful spans -->
+      <p class="subtitle" style="font-size:2rem; font-weight:bold; margin-bottom:10px; text-align:center;">
+        <span style="color:#ff4d4d;">Hit</span>
+        <span style="color:white;"> the </span>
+        <span style="color:#ffa500;">number</span>
+        <span style="color:white;"> (1-100),</span>
+        <br>
+        <span style="display:block; text-align:center;">
+          <span style="color:#ff69b4;">win</span>
+          <span style="color:#ffa500;"> Big!</span>
+        </span>
+      </p>
+
+      <!-- Form for user input -->
+      <form method="POST" style="margin-top:40px;">
+        <input type="number" name="guess" placeholder="Enter your guess" required />
+        <button type="submit">Guess</button>
+      </form>
+
+      <!-- Message display for feedback -->
+      {% if message %}
+        <p class="message">{{ message }}</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Confetti animation script shown only when user wins -->
+  {% if win %}
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    // Confetti animation for 3 seconds
+    const duration = 3 * 1000;
+    const end = Date.now() + duration;
+    (function frame() {
+      confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+      confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+  </script>
+  {% endif %}
+</body>
+</html>
